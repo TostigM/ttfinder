@@ -85,7 +85,7 @@ TTFinder is a web/mobile app that helps TTRPG (tabletop RPG) players and game ma
 | Real-time chat | Pusher | Free tier (200 connections, 200k messages/day); works with Vercel serverless |
 | Email | Resend or Brevo | Verification + password reset; free tier |
 | QR codes | `qrcode` npm library | No external service needed |
-| Hosting | Bluehost (app + DB) or Vercel (app) + Bluehost (DB) | TBD — Bluehost supports Node.js via cPanel |
+| Hosting | Bluehost (app + DB) | Node.js via cPanel; all in one place |
 
 ## Moderation at Launch
 - Single moderator (site owner) to start
@@ -119,6 +119,8 @@ TTFinder is a web/mobile app that helps TTRPG (tabletop RPG) players and game ma
 | 2026-04-14 | Platform: web-first, responsive/mobile-friendly | Single codebase; app store wrapping deferred |
 | 2026-04-14 | Tech stack finalized | Next.js + Tailwind + MySQL (Bluehost) + Vercel + Pusher + Cloudinary |
 | 2026-04-14 | DB managed via phpMyAdmin | SQL schema files generated, pasted in by user |
+| 2026-04-14 | Hosting: all on Bluehost | App + DB on Bluehost; Node.js via cPanel |
+| 2026-04-14 | URL path: start at tostigames.com/ttfinder | basePath set via env var; migrate to ttfinder.tostigames.com then own domain later |
 | 2026-04-14 | Review safeguards: post-connection only, one per connection, cooldown, retaliatory flag | Star rating (1–5) + written text |
 | 2026-04-14 | Auth: email/password + social login; social data never exposed publicly | |
 | 2026-04-14 | Moderation: single moderator (owner) at launch; scalable architecture | |

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --turbopack --import-alias \"@/*\" --no-git)",
+      "Read(//c/Users/tosti/projects/ttfinder/**)",
+      "Bash(npx create-next-app@latest ttfinder-scaffold --typescript --tailwind --eslint --app --src-dir --turbopack --import-alias \"@/*\" --no-git)",
+      "Bash(cp -r c:/Users/tosti/projects/ttfinder/ttfinder-scaffold/src c:/Users/tosti/projects/ttfinder/ttfinder/)",
+      "Bash(cp -r c:/Users/tosti/projects/ttfinder/ttfinder-scaffold/public c:/Users/tosti/projects/ttfinder/ttfinder/)",
+      "Bash(cp c:/Users/tosti/projects/ttfinder/ttfinder-scaffold/package.json c:/Users/tosti/projects/ttfinder/ttfinder/)",
+      "Bash(cp c:/Users/tosti/projects/ttfinder/ttfinder-scaffold/package-lock.json c:/Users/tosti/projects/ttfinder/ttfinder/)",
+      "Bash(cp c:/Users/tosti/projects/ttfinder/ttfinder-scaffold/next.config.ts c:/Users/tosti/projects/ttfinder/ttfinder/)"
+    ]
+  }
+}
