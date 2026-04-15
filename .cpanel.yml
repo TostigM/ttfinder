@@ -5,7 +5,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=$HOME/public_html/tostigames/ttfinder
+    - export DEPLOYPATH=/home2/dvqeyxmy/public_html/tostigames/ttfinder
     - cd $DEPLOYPATH
     - npm install --omit=dev
     - npm run build
