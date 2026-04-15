@@ -1,11 +1,10 @@
 # Bluehost / cPanel Git deployment configuration
 # Runs automatically after each git pull on the server.
-# Docs: https://docs.cpanel.net/cpanel/files/git-version-control/
+# PHP files are served directly by Apache — no build step needed.
 
 ---
 deployment:
   tasks:
     - export DEPLOYPATH=/home2/dvqeyxmy/public_html/tostigames/ttfinder
     - cd $DEPLOYPATH
-    - npm install --omit=dev
-    - npm run build
+    - php -r "echo 'TTFinder deployed at ' . date('Y-m-d H:i:s') . PHP_EOL;"

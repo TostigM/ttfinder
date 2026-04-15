@@ -1,0 +1,15 @@
+Options -Indexes
+
+# Route all non-file, non-directory requests to index.php (SPA routing)
+RewriteEngine On
+RewriteBase /ttfinder/
+
+# Skip real files and directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Route API calls to the api/ folder
+RewriteRule ^api/(.*)$ api/$1 [L]
+
+# Route everything else to index.php
+RewriteRule ^ index.php [L]

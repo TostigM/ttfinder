@@ -76,16 +76,17 @@ TTFinder is a web/mobile app that helps TTRPG (tabletop RPG) players and game ma
 ## Tech Stack
 | Layer | Choice | Notes |
 |---|---|---|
-| Frontend + Backend | Next.js (React + TypeScript) | Full-stack, deployed to Vercel free tier |
-| Styling | Tailwind CSS | Responsive-first |
-| Database | MySQL (Bluehost) — `dvqeyxmy_ttfinder` | Managed via phpMyAdmin; SQL files generated and pasted in |
-| Auth | Auth.js (NextAuth) | Email/password + social login |
-| File storage | Cloudinary | Free tier; photo upload + moderation hooks |
-| Photo moderation | Google Vision SafeSearch | 1,000 free checks/month |
-| Real-time chat | Pusher | Free tier (200 connections, 200k messages/day); works with Vercel serverless |
-| Email | Resend or Brevo | Verification + password reset; free tier |
-| QR codes | `qrcode` npm library | No external service needed |
-| Hosting | Bluehost (app + DB) | Node.js via cPanel; all in one place |
+| Frontend | Vanilla JavaScript (ES modules) + HTML | No build step; runs directly in browser |
+| Styling | Tailwind CSS (CDN) | No build step needed |
+| Backend | PHP 8.3 | Apache + PHP on Bluehost shared hosting |
+| Database | MySQL (Bluehost) — `dvqeyxmy_ttfinder` | Managed via phpMyAdmin; SQL via PDO |
+| Auth | PHP sessions + password_hash() | Email/password; OAuth via PHP for social login |
+| File storage | Cloudinary | Free tier; PHP SDK for upload + moderation |
+| Photo moderation | Google Vision SafeSearch | PHP cURL requests; 1,000 free checks/month |
+| Real-time chat | Pusher | PHP server SDK + JS client SDK; no Node needed |
+| Email | PHPMailer + SMTP | Password reset and verification emails |
+| QR codes | JS library (client-side) | No server dependency |
+| Hosting | Bluehost Apache + PHP | No Node.js required |
 
 ## Moderation at Launch
 - Single moderator (site owner) to start
@@ -119,8 +120,9 @@ TTFinder is a web/mobile app that helps TTRPG (tabletop RPG) players and game ma
 | 2026-04-14 | Platform: web-first, responsive/mobile-friendly | Single codebase; app store wrapping deferred |
 | 2026-04-14 | Tech stack finalized | Next.js + Tailwind + MySQL (Bluehost) + Vercel + Pusher + Cloudinary |
 | 2026-04-14 | DB managed via phpMyAdmin | SQL schema files generated, pasted in by user |
-| 2026-04-14 | Hosting: all on Bluehost | App + DB on Bluehost; Node.js via cPanel |
-| 2026-04-14 | URL path: start at tostigames.com/ttfinder | basePath set via env var; migrate to ttfinder.tostigames.com then own domain later |
+| 2026-04-14 | Hosting: all on Bluehost | Apache + PHP on Bluehost shared hosting |
+| 2026-04-14 | URL path: start at tostigames.com/ttfinder | migrate to ttfinder.tostigames.com then own domain later |
+| 2026-04-15 | Stack changed from Next.js to PHP 8.3 + vanilla JS | Node.js not available on Bluehost plan; PHP already running |
 | 2026-04-14 | Review safeguards: post-connection only, one per connection, cooldown, retaliatory flag | Star rating (1–5) + written text |
 | 2026-04-14 | Auth: email/password + social login; social data never exposed publicly | |
 | 2026-04-14 | Moderation: single moderator (owner) at launch; scalable architecture | |

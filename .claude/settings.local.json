@@ -8,7 +8,22 @@
       "Bash(cp -r c:/Users/tosti/projects/ttfinder/ttfinder-scaffold/public c:/Users/tosti/projects/ttfinder/ttfinder/)",
       "Bash(cp c:/Users/tosti/projects/ttfinder/ttfinder-scaffold/package.json c:/Users/tosti/projects/ttfinder/ttfinder/)",
       "Bash(cp c:/Users/tosti/projects/ttfinder/ttfinder-scaffold/package-lock.json c:/Users/tosti/projects/ttfinder/ttfinder/)",
-      "Bash(cp c:/Users/tosti/projects/ttfinder/ttfinder-scaffold/next.config.ts c:/Users/tosti/projects/ttfinder/ttfinder/)"
+      "Bash(cp c:/Users/tosti/projects/ttfinder/ttfinder-scaffold/next.config.ts c:/Users/tosti/projects/ttfinder/ttfinder/)",
+      "Bash(ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 claude@tostigames.com 'echo '\\\\''connected as:'\\\\'' && whoami && echo '\\\\''home:'\\\\'' && echo __TRACKED_VAR__ && echo '\\\\''node version:'\\\\'' && node -v 2>/dev/null || echo '\\\\''node not in PATH'\\\\''')",
+      "Bash(ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 -p 21098 claude@tostigames.com 'echo '\\\\''connected as:'\\\\'' && whoami && echo '\\\\''home:'\\\\'' && echo __TRACKED_VAR__ && echo '\\\\''node:'\\\\'' && node -v 2>/dev/null || echo '\\\\''node not in PATH'\\\\''')",
+      "Bash(sshpass -p '5yc^2?9G\\).aJ' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 claude@dvq.eyx.mybluehost.me 'whoami && echo '\\\\''---'\\\\'' && echo __TRACKED_VAR__ && echo '\\\\''---'\\\\'' && node -v 2>/dev/null || echo '\\\\''node not in PATH'\\\\''')",
+      "Bash(ssh-keygen -t ed25519 -C \"ttfinder-claude@tostigames\" -f /c/Users/tosti/.ssh/ttfinder_bluehost -N \"\")",
+      "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o StrictHostKeyChecking=no -o ConnectTimeout=10 claude@dvq.eyx.mybluehost.me 'whoami && echo '\\\\''---'\\\\'' && echo __TRACKED_VAR__ && echo '\\\\''---'\\\\'' && node -v 2>/dev/null || echo '\\\\''node not in PATH'\\\\''')",
+      "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o ConnectTimeout=10 claude@dvq.eyx.mybluehost.me 'whoami && echo '\\\\''---'\\\\'' && echo $HOME && echo '\\\\''---'\\\\'' && node -v 2>/dev/null || echo '\\\\''node not in PATH'\\\\''')",
+      "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o ConnectTimeout=10 -v claude@dvq.eyx.mybluehost.me)",
+      "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=10 claude@dvq.eyx.mybluehost.me \"whoami\")",
+      "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=10 dvqeyxmy@dvq.eyx.mybluehost.me 'whoami && echo __TRACKED_VAR__ && node -v 2>/dev/null || echo '\\\\''node not in PATH'\\\\''')",
+      "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no dvqeyxmy@dvq.eyx.mybluehost.me 'whoami && echo $HOME && ls $HOME/public_html/ 2>/dev/null | head -10 && node -v 2>/dev/null || echo '\\\\''node not in PATH'\\\\''')",
+      "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no dvqeyxmy@dvq.eyx.mybluehost.me \"which node 2>/dev/null || find /opt /usr/local/bin /usr/bin -name 'node' 2>/dev/null | head -5 && ls /home2/dvqeyxmy/public_html/ | grep tostig\")",
+      "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no dvqeyxmy@dvq.eyx.mybluehost.me \"find /opt /usr/local -name 'node' -type f 2>/dev/null | head -10 && ls ~/public_html/tostigames/\")",
+      "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no dvqeyxmy@dvq.eyx.mybluehost.me \"find /opt/cpanel -name 'node' -type f 2>/dev/null | head -10 && ls ~/public_html/tostigames/ttfinder/\")",
+      "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no dvqeyxmy@dvq.eyx.mybluehost.me \"ls ~/nodevenv/ 2>/dev/null || echo 'no nodevenv' && find /usr -name 'node' 2>/dev/null | head -5\")",
+      "Bash(ssh -o StrictHostKeyChecking=no bluehost-ttfinder \"echo 'SSH config working'\")"
     ]
   }
 }
