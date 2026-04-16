@@ -23,7 +23,8 @@
       "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no dvqeyxmy@dvq.eyx.mybluehost.me \"find /opt /usr/local -name 'node' -type f 2>/dev/null | head -10 && ls ~/public_html/tostigames/\")",
       "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no dvqeyxmy@dvq.eyx.mybluehost.me \"find /opt/cpanel -name 'node' -type f 2>/dev/null | head -10 && ls ~/public_html/tostigames/ttfinder/\")",
       "Bash(ssh -i /c/Users/tosti/.ssh/ttfinder_bluehost -o IdentitiesOnly=yes -o StrictHostKeyChecking=no dvqeyxmy@dvq.eyx.mybluehost.me \"ls ~/nodevenv/ 2>/dev/null || echo 'no nodevenv' && find /usr -name 'node' 2>/dev/null | head -5\")",
-      "Bash(ssh -o StrictHostKeyChecking=no bluehost-ttfinder \"echo 'SSH config working'\")"
+      "Bash(ssh -o StrictHostKeyChecking=no bluehost-ttfinder \"echo 'SSH config working'\")",
+      "Bash(ssh bluehost-ttfinder *)"
     ]
   }
 }

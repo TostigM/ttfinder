@@ -88,6 +88,19 @@ TTFinder is a web/mobile app that helps TTRPG (tabletop RPG) players and game ma
 | QR codes | JS library (client-side) | No server dependency |
 | Hosting | Bluehost Apache + PHP | No Node.js required |
 
+## Server & Infrastructure
+- **Hosting:** Bluehost shared hosting (Newfold/cPanel)
+- **Server hostname:** `dvq.eyx.mybluehost.me`
+- **cPanel username:** `dvqeyxmy`
+- **Home path:** `/home2/dvqeyxmy`
+- **App path:** `/home2/dvqeyxmy/public_html/tostigames/ttfinder`
+- **PHP version:** 8.3 (ea-php83 via LiteSpeed/Apache)
+- **Database:** Percona MySQL 8.0.45, db name `dvqeyxmy_ttfinder`
+- **Deployment:** cPanel Git Version Control → Deploy HEAD Commit → runs `.cpanel.yml`
+- **SSH:** key-based auth, alias `bluehost-ttfinder`, key at `~/.ssh/ttfinder_bluehost`
+- **config.php:** lives on server only (gitignored); copy from `includes/config.sample.php`
+- **URL path:** `tostigames.com/ttfinder` → will migrate to subdomain then own domain later
+
 ## Moderation at Launch
 - Single moderator (site owner) to start
 - Moderation dashboard must be simple and manageable for one person
@@ -123,6 +136,9 @@ TTFinder is a web/mobile app that helps TTRPG (tabletop RPG) players and game ma
 | 2026-04-14 | Hosting: all on Bluehost | Apache + PHP on Bluehost shared hosting |
 | 2026-04-14 | URL path: start at tostigames.com/ttfinder | migrate to ttfinder.tostigames.com then own domain later |
 | 2026-04-15 | Stack changed from Next.js to PHP 8.3 + vanilla JS | Node.js not available on Bluehost plan; PHP already running |
+| 2026-04-15 | SSH key auth configured for Bluehost | Key at ~/.ssh/ttfinder_bluehost; alias bluehost-ttfinder |
+| 2026-04-15 | Deployment via cPanel Git Version Control | Deploy HEAD Commit runs .cpanel.yml; no build step needed |
+| 2026-04-16 | .htaccess bug fixed | RewriteCond !-f/!-d must precede the catch-all rule, not the api/ rule |
 | 2026-04-14 | Review safeguards: post-connection only, one per connection, cooldown, retaliatory flag | Star rating (1–5) + written text |
 | 2026-04-14 | Auth: email/password + social login; social data never exposed publicly | |
 | 2026-04-14 | Moderation: single moderator (owner) at launch; scalable architecture | |
