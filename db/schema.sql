@@ -17,6 +17,7 @@ CREATE TABLE users (
   password_hash       VARCHAR(255)    NULL,                         -- NULL if social-login only
   display_name        VARCHAR(100)    NOT NULL,
   display_preference  ENUM('first_name','initials') NOT NULL DEFAULT 'first_name',
+  ui_language         VARCHAR(10)     NOT NULL DEFAULT 'en',        -- ISO 639-1 code for interface language
   profile_photo_url   VARCHAR(500)    NULL,
   photo_approved      TINYINT(1)      NOT NULL DEFAULT 0,           -- 0 = pending/rejected, 1 = approved
   is_moderator        TINYINT(1)      NOT NULL DEFAULT 0,
@@ -47,15 +48,17 @@ CREATE TABLE user_auth_providers (
 
 -- One LFT profile per user; can be public or private
 CREATE TABLE lft_profiles (
-  id          INT UNSIGNED  AUTO_INCREMENT PRIMARY KEY,
-  user_id     INT UNSIGNED  NOT NULL UNIQUE,
-  visibility  ENUM('public','private') NOT NULL DEFAULT 'public',
-  qr_token    VARCHAR(64)   NULL UNIQUE,             -- generated when set to private; used in QR code URL
-  availability TEXT         NULL,                    -- free text: days, times, frequency
-  bio         TEXT          NULL,
-  is_active   TINYINT(1)    NOT NULL DEFAULT 1,
-  created_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  id               INT UNSIGNED  AUTO_INCREMENT PRIMARY KEY,
+  user_id          INT UNSIGNED  NOT NULL UNIQUE,
+  visibility       ENUM('public','private') NOT NULL DEFAULT 'public',
+  qr_token         VARCHAR(64)   NULL UNIQUE,             -- generated when set to private; used in QR code URL
+  availability     TEXT          NULL,                    -- free text: days, times, frequency
+  bio              TEXT          NULL,
+  language         VARCHAR(50)   NULL,                    -- language the player wants to play in
+  location_country VARCHAR(100)  NULL,                    -- country for international browse filtering
+  is_active        TINYINT(1)    NOT NULL DEFAULT 1,
+  created_at       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -83,9 +86,11 @@ CREATE TABLE lfp_listings (
   schedule_frequency  VARCHAR(100)    NULL,           -- e.g. "Bi-weekly"
   schedule_time       VARCHAR(100)    NULL,           -- e.g. "6pm–10pm"
   safety_tools        TEXT            NULL,           -- free text
+  language            VARCHAR(50)     NULL,           -- language the game is run in
   location_type       VARCHAR(100)    NULL,           -- "game store", "private home", etc.
   location_town       VARCHAR(200)    NULL,           -- display-safe; shown to public
   location_state      VARCHAR(100)    NULL,
+  location_country    VARCHAR(100)    NULL,           -- country for international browse filtering
   location_lat        DECIMAL(10,7)   NULL,           -- stored server-side only; NEVER returned in API
   location_lng        DECIMAL(10,7)   NULL,           -- stored server-side only; NEVER returned in API
   player_slots_total  TINYINT UNSIGNED NULL,
