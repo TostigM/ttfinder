@@ -1,6 +1,6 @@
 import { api } from '../api.js';
 import { router } from '../router.js';
-import { tagsInput } from '../components/tags-input.js';
+import { systemsSelect } from '../components/systems-select.js';
 
 const base = window.TTFinder?.base ?? '';
 
@@ -94,9 +94,9 @@ export async function render(app) {
     router.push(e.target.closest('[data-link]').getAttribute('href'));
   });
 
-  const systemsTags = tagsInput(
+  const systemsTags = systemsSelect(
     app.querySelector('#systems-input'),
-    { placeholder: 'e.g. D&D 5e — press Enter to add', initial: profile?.systems ?? [] }
+    { initial: profile?.systems ?? [] }
   );
 
   const form      = app.querySelector('#lft-form');
