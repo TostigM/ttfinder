@@ -7,7 +7,7 @@
 - [ ] Restrict `AGENT.md` from being publicly accessible (add to .htaccess)
 
 ## Infrastructure
-- [ ] Run `db/schema.sql` in phpMyAdmin to create all 13 tables
+- [x] Run `db/schema.sql` in phpMyAdmin to create all 13 tables
 - [ ] Set up Cloudinary account and add credentials to config.php
 - [ ] Set up Pusher account and add credentials to config.php
 - [ ] Set up Google Vision API key and add to config.php

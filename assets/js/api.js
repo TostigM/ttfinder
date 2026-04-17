@@ -32,4 +32,15 @@ export const api = {
     logout:   ()     => request('POST', '/api/auth/logout.php'),
     me:       ()     => request('GET',  '/api/auth/me.php'),
   },
+
+  lft: {
+    get:  ()     => request('GET',  '/api/lft/get.php'),
+    save: (data) => request('POST', '/api/lft/save.php', data),
+  },
+
+  lfp: {
+    list:   ()     => request('GET',  '/api/lfp/list.php'),
+    get:    (id)   => request('GET',  `/api/lfp/get.php?id=${id}`),
+    create: (data) => request('POST', '/api/lfp/create.php', data),
+  },
 };

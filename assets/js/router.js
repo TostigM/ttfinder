@@ -10,6 +10,8 @@ const routes = {
   [`${base}/browse`]:      () => import('./pages/browse.js'),
   [`${base}/listing`]:     () => import('./pages/listing.js'),
   [`${base}/profile`]:     () => import('./pages/profile.js'),
+  [`${base}/lft-setup`]:   () => import('./pages/lft-setup.js'),
+  [`${base}/lfp-create`]:  () => import('./pages/lfp-create.js'),
   [`${base}/messages`]:    () => import('./pages/messages.js'),
 };
 
