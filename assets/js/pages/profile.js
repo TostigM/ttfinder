@@ -64,6 +64,27 @@ export async function render(app) {
       router.push(e.target.closest('[data-link]').getAttribute('href'));
     });
   });
+
+  app.querySelectorAll('[data-delete-id]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id    = parseInt(btn.dataset.deleteId);
+      const title = btn.dataset.deleteTitle;
+      if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+
+      btn.disabled    = true;
+      btn.textContent = 'Deleting…';
+
+      try {
+        await api.lfp.delete(id);
+        // Re-render the profile page after deletion
+        render(app);
+      } catch (err) {
+        alert(err.message || 'Failed to delete listing.');
+        btn.disabled    = false;
+        btn.textContent = 'Delete';
+      }
+    });
+  });
 }
 
 function lftSummary(lft) {
@@ -90,6 +111,16 @@ function lfpList(listings) {
         <p class="font-medium text-white">${escHtml(l.title)}</p>
         <p class="text-gray-400">${escHtml(l.systems?.join(', ') || '—')} · ${escHtml(l.location_town)}, ${escHtml(l.location_state)}</p>
         <span class="${l.is_active ? 'text-green-400' : 'text-gray-500'} text-xs">${l.is_active ? 'Active' : 'Inactive'}</span>
+      </div>
+      <div class="flex gap-2 shrink-0">
+        <a href="${base}/lfp-edit?id=${l.id}" data-link
+          class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded-lg transition">
+          Edit
+        </a>
+        <button data-delete-id="${l.id}" data-delete-title="${escHtml(l.title)}"
+          class="text-xs bg-red-900/50 hover:bg-red-800 border border-red-700 text-red-300 px-3 py-1.5 rounded-lg transition">
+          Delete
+        </button>
       </div>
     </div>
   `).join('');

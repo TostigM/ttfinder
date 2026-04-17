@@ -42,5 +42,7 @@ export const api = {
     list:   ()     => request('GET',  '/api/lfp/list.php'),
     get:    (id)   => request('GET',  `/api/lfp/get.php?id=${id}`),
     create: (data) => request('POST', '/api/lfp/create.php', data),
+    update: (data) => request('POST', '/api/lfp/update.php', data),
+    delete: (id)   => request('POST', '/api/lfp/delete.php', { id }),
   },
 };

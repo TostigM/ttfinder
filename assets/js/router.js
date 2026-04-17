@@ -12,6 +12,7 @@ const routes = {
   [`${base}/profile`]:     () => import('./pages/profile.js'),
   [`${base}/lft-setup`]:   () => import('./pages/lft-setup.js'),
   [`${base}/lfp-create`]:  () => import('./pages/lfp-create.js'),
+  [`${base}/lfp-edit`]:    () => import('./pages/lfp-edit.js'),
   [`${base}/messages`]:    () => import('./pages/messages.js'),
 };
 
