@@ -14,5 +14,6 @@ json_response([
         'email'        => $_SESSION['user_email'],
         'display_name' => $_SESSION['user_display_name'],
         'is_moderator' => (bool) ($_SESSION['is_moderator'] ?? false),
+        'ui_language'  => $_SESSION['ui_language'] ?? 'en',
     ]
 ]);

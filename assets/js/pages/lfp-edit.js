@@ -1,10 +1,19 @@
 import { api } from '../api.js';
 import { router } from '../router.js';
 import { systemsSelect } from '../components/systems-select.js';
+import { t } from '../i18n.js';
 
 const base = window.TTFinder?.base ?? '';
 
-const LOCATION_TYPES = ['Game store', 'Private home', 'Library', 'Park / outdoor', 'Online', 'Other'];
+// Canonical stored values → translation keys
+const LOCATION_TYPES = [
+  ['Game store',    'location.game_store'],
+  ['Private home',  'location.private_home'],
+  ['Library',       'location.library'],
+  ['Park / outdoor','location.park'],
+  ['Online',        'location.online'],
+  ['Other',         'location.other'],
+];
 
 export async function render(app) {
   const user = window.TTFinder?.user;
@@ -13,7 +22,7 @@ export async function render(app) {
   const id = parseInt(new URLSearchParams(window.location.search).get('id'));
   if (!id) { router.push(`${base}/profile`); return; }
 
-  app.innerHTML = `<div class="flex items-center justify-center min-h-screen"><p class="text-gray-500 text-sm">Loading…</p></div>`;
+  app.innerHTML = `<div class="flex items-center justify-center min-h-screen"><p class="text-gray-500 text-sm">${t('common.loading')}</p></div>`;
 
   let listing;
   try {
@@ -27,9 +36,9 @@ export async function render(app) {
   app.innerHTML = `
     <main class="max-w-xl mx-auto px-4 py-10">
       <div class="mb-6">
-        <a href="${base}/profile" data-link class="text-sm text-gray-400 hover:text-white transition">&larr; Back to profile</a>
-        <h1 class="text-2xl font-bold text-white mt-3">Edit LFP Listing</h1>
-        <p class="text-gray-400 text-sm mt-1">Update your table listing.</p>
+        <a href="${base}/profile" data-link class="text-sm text-gray-400 hover:text-white transition">${t('lfp.back')}</a>
+        <h1 class="text-2xl font-bold text-white mt-3">${t('lfp.edit_title')}</h1>
+        <p class="text-gray-400 text-sm mt-1">${t('lfp.edit_subtitle')}</p>
       </div>
 
       <form id="lfp-form" novalidate class="space-y-6">
@@ -39,35 +48,35 @@ export async function render(app) {
 
         <!-- Title -->
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="title">Listing title <span class="text-red-400">*</span></label>
+          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="title">${t('lfp.listing_title')} <span class="text-red-400">*</span></label>
           <input id="title" name="title" type="text" value="${escHtml(listing.title)}"
             class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition" />
         </div>
 
         <!-- Description -->
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="description">Description <span class="text-gray-500">(optional)</span></label>
+          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="description">${t('lfp.description')} <span class="text-gray-500">${t('lfp.desc_optional')}</span></label>
           <textarea id="description" name="description" rows="3"
             class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm resize-none">${escHtml(listing.description ?? '')}</textarea>
         </div>
 
         <!-- Systems -->
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">TTRPG system(s) <span class="text-red-400">*</span></label>
+          <label class="block text-sm font-medium text-gray-300 mb-2">${t('lfp.systems')} <span class="text-red-400">*</span></label>
           <div id="systems-input"></div>
         </div>
 
         <!-- Schedule -->
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">Schedule</label>
+          <label class="block text-sm font-medium text-gray-300 mb-2">${t('lfp.schedule')}</label>
           <div class="grid grid-cols-1 gap-3">
-            <input id="schedule_day" name="schedule_day" type="text" placeholder="Day(s) — e.g. Every Saturday"
+            <input id="schedule_day" name="schedule_day" type="text" placeholder="${t('lfp.sched_day_ph')}"
               value="${escHtml(listing.schedule_day ?? '')}"
               class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm" />
-            <input id="schedule_frequency" name="schedule_frequency" type="text" placeholder="Frequency — e.g. Bi-weekly"
+            <input id="schedule_frequency" name="schedule_frequency" type="text" placeholder="${t('lfp.sched_freq_ph')}"
               value="${escHtml(listing.schedule_frequency ?? '')}"
               class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm" />
-            <input id="schedule_time" name="schedule_time" type="text" placeholder="Time — e.g. 6pm–10pm EST"
+            <input id="schedule_time" name="schedule_time" type="text" placeholder="${t('lfp.sched_time_ph')}"
               value="${escHtml(listing.schedule_time ?? '')}"
               class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm" />
           </div>
@@ -75,26 +84,26 @@ export async function render(app) {
 
         <!-- Safety tools -->
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="safety_tools">Safety tools <span class="text-gray-500">(optional)</span></label>
+          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="safety_tools">${t('lfp.safety')} <span class="text-gray-500">${t('lfp.safety_optional')}</span></label>
           <textarea id="safety_tools" name="safety_tools" rows="2"
             class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm resize-none">${escHtml(listing.safety_tools ?? '')}</textarea>
         </div>
 
         <!-- Location -->
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">Location <span class="text-red-400">*</span></label>
-          <p class="text-xs text-gray-500 mb-3">Only your town name will be shown publicly.</p>
+          <label class="block text-sm font-medium text-gray-300 mb-2">${t('lfp.location')} <span class="text-red-400">*</span></label>
+          <p class="text-xs text-gray-500 mb-3">${t('lfp.location_note')}</p>
           <div class="space-y-3">
             <select id="location_type" name="location_type"
               class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
-              <option value="">Where do you meet?</option>
-              ${LOCATION_TYPES.map(t => `<option value="${t}" ${listing.location_type === t ? 'selected' : ''}>${t}</option>`).join('')}
+              <option value="">${t('lfp.location_type_ph')}</option>
+              ${LOCATION_TYPES.map(([val, key]) => `<option value="${val}" ${listing.location_type === val ? 'selected' : ''}>${t(key)}</option>`).join('')}
             </select>
             <div class="grid grid-cols-2 gap-3">
-              <input id="location_town" name="location_town" type="text" placeholder="Town / City *"
+              <input id="location_town" name="location_town" type="text" placeholder="${t('lfp.location_town_ph')} *"
                 value="${escHtml(listing.location_town ?? '')}"
                 class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm" />
-              <input id="location_state" name="location_state" type="text" placeholder="State / Region *"
+              <input id="location_state" name="location_state" type="text" placeholder="${t('lfp.location_state_ph')} *"
                 value="${escHtml(listing.location_state ?? '')}"
                 class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm" />
             </div>
@@ -103,7 +112,7 @@ export async function render(app) {
 
         <!-- Player slots -->
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="player_slots_total">Total player slots <span class="text-gray-500">(optional)</span></label>
+          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="player_slots_total">${t('lfp.slots')} <span class="text-gray-500">${t('lfp.slots_optional')}</span></label>
           <input id="player_slots_total" name="player_slots_total" type="number" min="1" max="20"
             value="${listing.player_slots_total ?? ''}"
             class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm" />
@@ -112,8 +121,8 @@ export async function render(app) {
         <!-- Active toggle -->
         <div class="flex items-center justify-between bg-gray-800 rounded-lg px-4 py-3">
           <div>
-            <p class="text-sm font-medium text-gray-200">Listing active</p>
-            <p class="text-xs text-gray-500">Deactivate to pause without deleting.</p>
+            <p class="text-sm font-medium text-gray-200">${t('lfp.active_label')}</p>
+            <p class="text-xs text-gray-500">${t('lfp.active_desc')}</p>
           </div>
           <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" id="is_active" ${listing.is_active ? 'checked' : ''} class="sr-only peer" />
@@ -123,7 +132,7 @@ export async function render(app) {
 
         <button type="submit" id="submit-btn"
           class="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold py-2.5 rounded-lg transition">
-          Save changes
+          ${t('lfp.edit_submit')}
         </button>
 
       </form>
@@ -163,26 +172,26 @@ export async function render(app) {
     const player_slots_total = form.player_slots_total.value ? parseInt(form.player_slots_total.value) : null;
     const is_active          = form.is_active.checked;
 
-    if (!title)          return showError('A title is required.');
-    if (!systems.length) return showError('Please add at least one TTRPG system.');
-    if (!location_town)  return showError('Please enter a town or city.');
-    if (!location_state) return showError('Please enter a state or region.');
+    if (!title)          return showError(t('lfp.err_title'));
+    if (!systems.length) return showError(t('lfp.err_systems'));
+    if (!location_town)  return showError(t('lfp.err_town'));
+    if (!location_state) return showError(t('lfp.err_state'));
 
     submitBtn.disabled    = true;
-    submitBtn.textContent = 'Saving…';
+    submitBtn.textContent = t('lfp.edit_submitting');
 
     try {
       await api.lfp.update({
         id, title, description, systems, schedule_day, schedule_frequency, schedule_time,
         safety_tools, location_type, location_town, location_state, player_slots_total, is_active,
       });
-      successBox.textContent = 'Listing saved!';
+      successBox.textContent = t('lfp.saved');
       successBox.classList.remove('hidden');
       setTimeout(() => router.push(`${base}/profile`), 1000);
     } catch (err) {
       showError(err.message);
       submitBtn.disabled    = false;
-      submitBtn.textContent = 'Save changes';
+      submitBtn.textContent = t('lfp.edit_submit');
     }
   });
 

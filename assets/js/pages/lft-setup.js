@@ -1,6 +1,7 @@
 import { api } from '../api.js';
 import { router } from '../router.js';
 import { systemsSelect } from '../components/systems-select.js';
+import { t } from '../i18n.js';
 
 const base = window.TTFinder?.base ?? '';
 
@@ -8,16 +9,15 @@ export async function render(app) {
   const user = window.TTFinder?.user;
   if (!user) { router.push(`${base}/login`); return; }
 
-  // Load existing profile if any
-  app.innerHTML = `<div class="flex items-center justify-center min-h-screen"><p class="text-gray-500 text-sm">Loading…</p></div>`;
+  app.innerHTML = `<div class="flex items-center justify-center min-h-screen"><p class="text-gray-500 text-sm">${t('common.loading')}</p></div>`;
   const { profile } = await api.lft.get().catch(() => ({ profile: null }));
 
   app.innerHTML = `
     <main class="max-w-xl mx-auto px-4 py-10">
       <div class="mb-6">
-        <a href="${base}/profile" data-link class="text-sm text-gray-400 hover:text-white transition">&larr; Back to profile</a>
-        <h1 class="text-2xl font-bold text-white mt-3">${profile ? 'Edit' : 'Set up'} LFT Profile</h1>
-        <p class="text-gray-400 text-sm mt-1">Tell GMs what kind of table you're looking for.</p>
+        <a href="${base}/profile" data-link class="text-sm text-gray-400 hover:text-white transition">${t('lft.back')}</a>
+        <h1 class="text-2xl font-bold text-white mt-3">${profile ? t('lft.title_edit') : t('lft.title_setup')}</h1>
+        <p class="text-gray-400 text-sm mt-1">${t('lft.subtitle')}</p>
       </div>
 
       <form id="lft-form" novalidate class="space-y-6">
@@ -27,42 +27,42 @@ export async function render(app) {
 
         <!-- Systems -->
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">TTRPG systems you want to play <span class="text-red-400">*</span></label>
+          <label class="block text-sm font-medium text-gray-300 mb-2">${t('lft.systems')} <span class="text-red-400">*</span></label>
           <div id="systems-input"></div>
         </div>
 
         <!-- Availability -->
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="availability">Availability</label>
-          <textarea id="availability" name="availability" rows="2" placeholder="e.g. Weekday evenings, every other Saturday…"
+          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="availability">${t('lft.availability')}</label>
+          <textarea id="availability" name="availability" rows="2" placeholder="${t('lft.avail_ph')}"
             class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm resize-none">${escHtml(profile?.availability ?? '')}</textarea>
         </div>
 
         <!-- Bio -->
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="bio">About you <span class="text-gray-500">(optional)</span></label>
-          <textarea id="bio" name="bio" rows="3" placeholder="A little about yourself as a player…"
+          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="bio">${t('lft.bio')} <span class="text-gray-500">${t('lft.bio_optional')}</span></label>
+          <textarea id="bio" name="bio" rows="3" placeholder="${t('lft.bio_ph')}"
             class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm resize-none">${escHtml(profile?.bio ?? '')}</textarea>
         </div>
 
         <!-- Visibility -->
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">Visibility</label>
+          <label class="block text-sm font-medium text-gray-300 mb-2">${t('lft.visibility')}</label>
           <div class="flex flex-col gap-2">
             <label class="flex items-start gap-3 cursor-pointer">
               <input type="radio" name="visibility" value="public" ${(!profile || profile.visibility === 'public') ? 'checked' : ''}
                 class="mt-0.5 accent-indigo-500" />
               <div>
-                <p class="text-sm text-gray-200 font-medium">Public</p>
-                <p class="text-xs text-gray-500">GMs can find and invite you through the browse page.</p>
+                <p class="text-sm text-gray-200 font-medium">${t('lft.public')}</p>
+                <p class="text-xs text-gray-500">${t('lft.public_desc')}</p>
               </div>
             </label>
             <label class="flex items-start gap-3 cursor-pointer">
               <input type="radio" name="visibility" value="private" ${profile?.visibility === 'private' ? 'checked' : ''}
                 class="mt-0.5 accent-indigo-500" />
               <div>
-                <p class="text-sm text-gray-200 font-medium">Private</p>
-                <p class="text-xs text-gray-500">Hidden from browse. Share your QR code with a specific GM to connect.</p>
+                <p class="text-sm text-gray-200 font-medium">${t('lft.private')}</p>
+                <p class="text-xs text-gray-500">${t('lft.private_desc')}</p>
               </div>
             </label>
           </div>
@@ -71,8 +71,8 @@ export async function render(app) {
         <!-- Active toggle -->
         <div class="flex items-center justify-between bg-gray-800 rounded-lg px-4 py-3">
           <div>
-            <p class="text-sm font-medium text-gray-200">Profile active</p>
-            <p class="text-xs text-gray-500">Deactivate to pause without deleting your profile.</p>
+            <p class="text-sm font-medium text-gray-200">${t('lft.active_label')}</p>
+            <p class="text-xs text-gray-500">${t('lft.active_desc')}</p>
           </div>
           <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" id="is_active" ${(!profile || profile.is_active) ? 'checked' : ''} class="sr-only peer" />
@@ -82,7 +82,7 @@ export async function render(app) {
 
         <button type="submit" id="submit-btn"
           class="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold py-2.5 rounded-lg transition">
-          Save profile
+          ${t('lft.submit')}
         </button>
 
       </form>
@@ -99,37 +99,37 @@ export async function render(app) {
     { initial: profile?.systems ?? [] }
   );
 
-  const form      = app.querySelector('#lft-form');
-  const errorBox  = app.querySelector('#form-error');
-  const successBox= app.querySelector('#form-success');
-  const submitBtn = app.querySelector('#submit-btn');
+  const form       = app.querySelector('#lft-form');
+  const errorBox   = app.querySelector('#form-error');
+  const successBox = app.querySelector('#form-success');
+  const submitBtn  = app.querySelector('#submit-btn');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorBox.classList.add('hidden');
     successBox.classList.add('hidden');
 
-    const systems    = systemsTags.getValues();
+    const systems      = systemsTags.getValues();
     const availability = form.availability.value.trim();
     const bio          = form.bio.value.trim();
     const visibility   = form.querySelector('[name=visibility]:checked').value;
     const is_active    = form.is_active.checked;
 
-    if (!systems.length) return showError('Please add at least one TTRPG system.');
+    if (!systems.length) return showError(t('lft.err_systems'));
 
     submitBtn.disabled    = true;
-    submitBtn.textContent = 'Saving…';
+    submitBtn.textContent = t('lft.submitting');
 
     try {
       await api.lft.save({ systems, availability, bio, visibility, is_active });
-      successBox.textContent = 'Profile saved!';
+      successBox.textContent = t('lft.saved');
       successBox.classList.remove('hidden');
       setTimeout(() => router.push(`${base}/profile`), 1000);
     } catch (err) {
       showError(err.message);
     } finally {
       submitBtn.disabled    = false;
-      submitBtn.textContent = 'Save profile';
+      submitBtn.textContent = t('lft.submit');
     }
   });
 

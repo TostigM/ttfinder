@@ -1,5 +1,6 @@
 import { api } from '../api.js';
 import { router } from '../router.js';
+import { t } from '../i18n.js';
 
 const base = window.TTFinder?.base ?? '';
 
@@ -10,27 +11,27 @@ export async function render(app) {
   app.innerHTML = `
     <main class="max-w-4xl mx-auto px-4 py-10">
       <div class="mb-8">
-        <h1 class="text-2xl font-bold text-white">Welcome, ${escHtml(user.display_name)}</h1>
-        <p class="text-gray-400 mt-1">What would you like to do today?</p>
+        <h1 class="text-2xl font-bold text-white">${t('dashboard.welcome', { name: escHtml(user.display_name) })}</h1>
+        <p class="text-gray-400 mt-1">${t('dashboard.subtitle')}</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
 
         <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
-          <h2 class="text-lg font-semibold text-indigo-400 mb-1">Looking for Table</h2>
-          <p class="text-gray-400 text-sm mb-4">Set up your player profile to find a group.</p>
+          <h2 class="text-lg font-semibold text-indigo-400 mb-1">${t('dashboard.lft_title')}</h2>
+          <p class="text-gray-400 text-sm mb-4">${t('dashboard.lft_desc')}</p>
           <a href="${base}/lft-setup" data-link
             class="inline-block bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
-            Set up LFT profile
+            ${t('dashboard.lft_btn')}
           </a>
         </div>
 
         <div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
-          <h2 class="text-lg font-semibold text-emerald-400 mb-1">Looking for Players</h2>
-          <p class="text-gray-400 text-sm mb-4">Create a listing to find players for your table.</p>
+          <h2 class="text-lg font-semibold text-emerald-400 mb-1">${t('dashboard.lfp_title')}</h2>
+          <p class="text-gray-400 text-sm mb-4">${t('dashboard.lfp_desc')}</p>
           <a href="${base}/lfp-create" data-link
             class="inline-block bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
-            Create LFP listing
+            ${t('dashboard.lfp_btn')}
           </a>
         </div>
 
@@ -40,20 +41,20 @@ export async function render(app) {
 
         <a href="${base}/browse" data-link
           class="bg-gray-900 border border-gray-800 hover:border-gray-600 rounded-xl p-6 transition block">
-          <h2 class="text-base font-semibold text-gray-200 mb-1">Browse listings</h2>
-          <p class="text-gray-500 text-sm">Find tables and players near you.</p>
+          <h2 class="text-base font-semibold text-gray-200 mb-1">${t('dashboard.browse_title')}</h2>
+          <p class="text-gray-500 text-sm">${t('dashboard.browse_desc')}</p>
         </a>
 
         <a href="${base}/profile" data-link
           class="bg-gray-900 border border-gray-800 hover:border-gray-600 rounded-xl p-6 transition block">
-          <h2 class="text-base font-semibold text-gray-200 mb-1">My profile</h2>
-          <p class="text-gray-500 text-sm">View and manage your LFT profile and LFP listings.</p>
+          <h2 class="text-base font-semibold text-gray-200 mb-1">${t('dashboard.profile_title')}</h2>
+          <p class="text-gray-500 text-sm">${t('dashboard.profile_desc')}</p>
         </a>
 
       </div>
 
       <div class="mt-8 text-right">
-        <button id="logout-btn" class="text-sm text-gray-500 hover:text-red-400 transition">Log out</button>
+        <button id="logout-btn" class="text-sm text-gray-500 hover:text-red-400 transition">${t('dashboard.logout')}</button>
       </div>
     </main>
   `;

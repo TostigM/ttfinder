@@ -2,10 +2,12 @@
 
 import { router } from './router.js';
 import { renderNav, updateNav } from './components/nav.js';
+import { initI18n } from './i18n.js';
 
 const app = document.getElementById('app');
 
 async function init() {
+  await initI18n();
   renderNav();
   await router.navigate(window.location.pathname);
 }

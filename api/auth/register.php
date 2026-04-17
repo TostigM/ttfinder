@@ -58,6 +58,7 @@ $_SESSION['user_id']           = (int) $userId;
 $_SESSION['user_email']        = $email;
 $_SESSION['user_display_name'] = $displayName;
 $_SESSION['is_moderator']      = false;
+$_SESSION['ui_language']       = 'en';
 session_regenerate_id(true);
 
 json_response([
@@ -66,5 +67,6 @@ json_response([
         'email'        => $email,
         'display_name' => $displayName,
         'is_moderator' => false,
+        'ui_language'  => 'en',
     ]
 ], 201);

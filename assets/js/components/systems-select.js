@@ -7,6 +7,7 @@
 //   sel.getValues(); // returns string[]
 
 import { TTRPG_SYSTEMS } from '../data/systems.js';
+import { t } from '../i18n.js';
 
 export function systemsSelect(container, { initial = [] } = {}) {
   let selected = [...initial];
@@ -36,7 +37,7 @@ export function systemsSelect(container, { initial = [] } = {}) {
       <!-- Search input -->
       <div class="relative">
         <input id="sys-search" type="text" autocomplete="off"
-          placeholder="Search systems…"
+          placeholder="${t('sys.search_ph')}"
           value="${escHtml(query)}"
           class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm" />
 
@@ -57,12 +58,12 @@ export function systemsSelect(container, { initial = [] } = {}) {
       <!-- "Other" free-text input -->
       ${otherMode ? `
         <div class="flex gap-2 mt-2">
-          <input id="other-input" type="text" placeholder="Enter system name…"
+          <input id="other-input" type="text" placeholder="${t('sys.other_ph')}"
             class="flex-1 bg-gray-800 border border-indigo-600 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-400 transition text-sm" />
           <button type="button" id="other-add"
-            class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg transition text-sm">Add</button>
+            class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg transition text-sm">${t('sys.other_add')}</button>
           <button type="button" id="other-cancel"
-            class="text-gray-400 hover:text-white px-3 py-2 transition text-sm">Cancel</button>
+            class="text-gray-400 hover:text-white px-3 py-2 transition text-sm">${t('sys.other_cancel')}</button>
         </div>
       ` : ''}
     `;

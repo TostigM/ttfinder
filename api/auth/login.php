@@ -37,6 +37,7 @@ $_SESSION['user_id']           = (int) $user['id'];
 $_SESSION['user_email']        = $user['email'];
 $_SESSION['user_display_name'] = $user['display_name'];
 $_SESSION['is_moderator']      = (bool) $user['is_moderator'];
+$_SESSION['ui_language']       = $user['ui_language'] ?? 'en';
 session_regenerate_id(true);
 
 json_response([
@@ -45,5 +46,6 @@ json_response([
         'email'        => $user['email'],
         'display_name' => $user['display_name'],
         'is_moderator' => (bool) $user['is_moderator'],
+        'ui_language'  => $user['ui_language'] ?? 'en',
     ]
 ]);
