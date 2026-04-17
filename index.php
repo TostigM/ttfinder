@@ -1,7 +1,19 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) session_start();
 require_once __DIR__ . '/includes/config.php';
 
 $base = APP_BASE;
+
+// Pass current session user to JS (null if not logged in)
+$currentUser = null;
+if (!empty($_SESSION['user_id'])) {
+    $currentUser = [
+        'id'           => (int) $_SESSION['user_id'],
+        'email'        => $_SESSION['user_email'],
+        'display_name' => $_SESSION['user_display_name'],
+        'is_moderator' => (bool) ($_SESSION['is_moderator'] ?? false),
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,11 +37,12 @@ $base = APP_BASE;
     </div>
   </div>
 
-  <!-- Pass server config to JS -->
+  <!-- Pass server config and session user to JS -->
   <script>
     window.TTFinder = {
       base: '<?= $base ?>',
       env:  '<?= APP_ENV ?>',
+      user: <?= json_encode($currentUser) ?>,
     };
   </script>
 

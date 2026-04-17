@@ -29,6 +29,8 @@ export const router = {
       console.error('Router error:', err);
       app.innerHTML = '<div class="flex items-center justify-center min-h-screen"><p class="text-red-400">Something went wrong. Please refresh.</p></div>';
     }
+    // Refresh nav after every navigation (auth state may have changed)
+    window.TTFinder?.updateNav?.();
   },
 
   push(path) {
