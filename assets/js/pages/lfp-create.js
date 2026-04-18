@@ -1,9 +1,11 @@
 import { api } from '../api.js';
 import { router } from '../router.js';
 import { systemsSelect } from '../components/systems-select.js';
-import { t } from '../i18n.js';
+import { t, SUPPORTED_LANGS, langLabel } from '../i18n.js';
 
 const base = window.TTFinder?.base ?? '';
+
+const DISTANCE_OPTIONS = [5, 10, 15, 25, 50, 100];
 
 // Canonical stored values → translation keys
 const LOCATION_TYPES = [
@@ -18,6 +20,14 @@ const LOCATION_TYPES = [
 export async function render(app) {
   const user = window.TTFinder?.user;
   if (!user) { router.push(`${base}/login`); return; }
+
+  const distOptions = DISTANCE_OPTIONS.map(d =>
+    `<option value="${d}" ${d === 25 ? 'selected' : ''}>${t(`dist.${d}`)}</option>`
+  ).join('');
+
+  const langOptions = SUPPORTED_LANGS.map(l =>
+    `<option value="${l}">${langLabel(l)}</option>`
+  ).join('');
 
   app.innerHTML = `
     <main class="max-w-xl mx-auto px-4 py-10">
@@ -88,7 +98,29 @@ export async function render(app) {
               <input id="location_state" name="location_state" type="text" placeholder="${t('lfp.location_state_ph')} *"
                 class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm" />
             </div>
+            <input id="location_country" name="location_country" type="text" placeholder="${t('lfp.location_country_ph')}"
+              class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm" />
           </div>
+        </div>
+
+        <!-- Game Language -->
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="game_language">${t('lfp.game_language')}</label>
+          <select id="game_language" name="game_language"
+            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
+            <option value="">${t('lfp.language_ph')}</option>
+            ${langOptions}
+          </select>
+        </div>
+
+        <!-- Distance preference -->
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1" for="distance_preference">${t('lfp.distance_label')}</label>
+          <p class="text-xs text-gray-500 mb-2">${t('lfp.distance_note')}</p>
+          <select id="distance_preference" name="distance_preference"
+            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
+            ${distOptions}
+          </select>
         </div>
 
         <!-- Player slots -->
@@ -132,6 +164,9 @@ export async function render(app) {
     const location_type      = form.location_type.value;
     const location_town      = form.location_town.value.trim();
     const location_state     = form.location_state.value.trim();
+    const location_country   = form.location_country.value.trim();
+    const language           = form.game_language.value;
+    const distance_preference = parseInt(form.distance_preference.value, 10);
     const player_slots_total = form.player_slots_total.value ? parseInt(form.player_slots_total.value) : null;
 
     if (!title)          return showError(t('lfp.err_title'));
@@ -145,7 +180,8 @@ export async function render(app) {
     try {
       await api.lfp.create({
         title, description, systems, schedule_day, schedule_frequency, schedule_time,
-        safety_tools, location_type, location_town, location_state, player_slots_total,
+        safety_tools, location_type, location_town, location_state, location_country,
+        language, distance_preference, player_slots_total,
       });
       router.push(`${base}/profile`);
     } catch (err) {

@@ -39,10 +39,20 @@ export const api = {
   },
 
   lfp: {
-    list:   ()     => request('GET',  '/api/lfp/list.php'),
-    get:    (id)   => request('GET',  `/api/lfp/get.php?id=${id}`),
-    create: (data) => request('POST', '/api/lfp/create.php', data),
-    update: (data) => request('POST', '/api/lfp/update.php', data),
-    delete: (id)   => request('POST', '/api/lfp/delete.php', { id }),
+    list:   ()       => request('GET',  '/api/lfp/list.php'),
+    get:    (id)     => request('GET',  `/api/lfp/get.php?id=${id}`),
+    create: (data)   => request('POST', '/api/lfp/create.php', data),
+    update: (data)   => request('POST', '/api/lfp/update.php', data),
+    delete: (id)     => request('POST', '/api/lfp/delete.php', { id }),
+    browse: (params) => {
+      const qs = new URLSearchParams(
+        Object.fromEntries(Object.entries(params).filter(([, v]) => v !== '' && v != null))
+      ).toString();
+      return request('GET', `/api/lfp/browse.php${qs ? '?' + qs : ''}`);
+    },
+  },
+
+  connections: {
+    request: (listingId) => request('POST', '/api/connections/request.php', { listing_id: listingId }),
   },
 };

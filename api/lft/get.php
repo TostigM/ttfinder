@@ -22,10 +22,13 @@ $stmt = $pdo->prepare('SELECT system_name FROM lft_systems WHERE lft_profile_id 
 $stmt->execute([$profile['id']]);
 $systems = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-// Only include qr_token if profile is private (owner only)
-$profile['systems']   = $systems;
-$profile['id']        = (int) $profile['id'];
-$profile['user_id']   = (int) $profile['user_id'];
-$profile['is_active'] = (bool) $profile['is_active'];
+$profile['systems']             = $systems;
+$profile['id']                  = (int) $profile['id'];
+$profile['user_id']             = (int) $profile['user_id'];
+$profile['is_active']           = (bool) $profile['is_active'];
+$profile['distance_preference'] = (int) $profile['distance_preference'];
+
+// Never expose coordinates
+unset($profile['location_lat'], $profile['location_lng']);
 
 json_response(['profile' => $profile]);

@@ -1,9 +1,11 @@
 import { api } from '../api.js';
 import { router } from '../router.js';
 import { systemsSelect } from '../components/systems-select.js';
-import { t } from '../i18n.js';
+import { t, SUPPORTED_LANGS, langLabel } from '../i18n.js';
 
 const base = window.TTFinder?.base ?? '';
+
+const DISTANCE_OPTIONS = [5, 10, 15, 25, 50, 100];
 
 export async function render(app) {
   const user = window.TTFinder?.user;
@@ -11,6 +13,14 @@ export async function render(app) {
 
   app.innerHTML = `<div class="flex items-center justify-center min-h-screen"><p class="text-gray-500 text-sm">${t('common.loading')}</p></div>`;
   const { profile } = await api.lft.get().catch(() => ({ profile: null }));
+
+  const distOptions = DISTANCE_OPTIONS.map(d =>
+    `<option value="${d}" ${(profile?.distance_preference ?? 25) == d ? 'selected' : ''}>${t(`dist.${d}`)}</option>`
+  ).join('');
+
+  const langOptions = SUPPORTED_LANGS.map(l =>
+    `<option value="${l}" ${(profile?.language ?? '') === l ? 'selected' : ''}>${langLabel(l)}</option>`
+  ).join('');
 
   app.innerHTML = `
     <main class="max-w-xl mx-auto px-4 py-10">
@@ -43,6 +53,46 @@ export async function render(app) {
           <label class="block text-sm font-medium text-gray-300 mb-1.5" for="bio">${t('lft.bio')} <span class="text-gray-500">${t('lft.bio_optional')}</span></label>
           <textarea id="bio" name="bio" rows="3" placeholder="${t('lft.bio_ph')}"
             class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm resize-none">${escHtml(profile?.bio ?? '')}</textarea>
+        </div>
+
+        <!-- Location -->
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1">${t('lft.location')}</label>
+          <p class="text-xs text-gray-500 mb-2">${t('lft.location_note')}</p>
+          <div class="flex flex-col gap-2">
+            <input id="location_town" name="location_town" type="text"
+              placeholder="${t('lft.town_ph')}"
+              value="${escHtml(profile?.location_town ?? '')}"
+              class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm" />
+            <input id="location_state" name="location_state" type="text"
+              placeholder="${t('lft.state_ph')}"
+              value="${escHtml(profile?.location_state ?? '')}"
+              class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm" />
+            <input id="location_country" name="location_country" type="text"
+              placeholder="${t('lft.country_ph')}"
+              value="${escHtml(profile?.location_country ?? '')}"
+              class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition text-sm" />
+          </div>
+        </div>
+
+        <!-- Game Language -->
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1.5" for="game_language">${t('lft.game_language')}</label>
+          <select id="game_language" name="game_language"
+            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
+            <option value="">${t('browse.any_language')}</option>
+            ${langOptions}
+          </select>
+        </div>
+
+        <!-- Distance preference -->
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1" for="distance_preference">${t('lft.distance_label')}</label>
+          <p class="text-xs text-gray-500 mb-2">${t('lft.distance_note')}</p>
+          <select id="distance_preference" name="distance_preference"
+            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
+            ${distOptions}
+          </select>
         </div>
 
         <!-- Visibility -->
@@ -109,11 +159,16 @@ export async function render(app) {
     errorBox.classList.add('hidden');
     successBox.classList.add('hidden');
 
-    const systems      = systemsTags.getValues();
-    const availability = form.availability.value.trim();
-    const bio          = form.bio.value.trim();
-    const visibility   = form.querySelector('[name=visibility]:checked').value;
-    const is_active    = form.is_active.checked;
+    const systems             = systemsTags.getValues();
+    const availability        = form.availability.value.trim();
+    const bio                 = form.bio.value.trim();
+    const visibility          = form.querySelector('[name=visibility]:checked').value;
+    const is_active           = form.is_active.checked;
+    const location_town       = form.location_town.value.trim();
+    const location_state      = form.location_state.value.trim();
+    const location_country    = form.location_country.value.trim();
+    const language            = form.game_language.value;
+    const distance_preference = parseInt(form.distance_preference.value, 10);
 
     if (!systems.length) return showError(t('lft.err_systems'));
 
@@ -121,7 +176,11 @@ export async function render(app) {
     submitBtn.textContent = t('lft.submitting');
 
     try {
-      await api.lft.save({ systems, availability, bio, visibility, is_active });
+      await api.lft.save({
+        systems, availability, bio, visibility, is_active,
+        location_town, location_state, location_country,
+        language, distance_preference
+      });
       successBox.textContent = t('lft.saved');
       successBox.classList.remove('hidden');
       setTimeout(() => router.push(`${base}/profile`), 1000);

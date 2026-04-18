@@ -48,17 +48,22 @@ CREATE TABLE user_auth_providers (
 
 -- One LFT profile per user; can be public or private
 CREATE TABLE lft_profiles (
-  id               INT UNSIGNED  AUTO_INCREMENT PRIMARY KEY,
-  user_id          INT UNSIGNED  NOT NULL UNIQUE,
-  visibility       ENUM('public','private') NOT NULL DEFAULT 'public',
-  qr_token         VARCHAR(64)   NULL UNIQUE,             -- generated when set to private; used in QR code URL
-  availability     TEXT          NULL,                    -- free text: days, times, frequency
-  bio              TEXT          NULL,
-  language         VARCHAR(50)   NULL,                    -- language the player wants to play in
-  location_country VARCHAR(100)  NULL,                    -- country for international browse filtering
-  is_active        TINYINT(1)    NOT NULL DEFAULT 1,
-  created_at       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  id                  INT UNSIGNED     AUTO_INCREMENT PRIMARY KEY,
+  user_id             INT UNSIGNED     NOT NULL UNIQUE,
+  visibility          ENUM('public','private') NOT NULL DEFAULT 'public',
+  qr_token            VARCHAR(64)      NULL UNIQUE,        -- generated when set to private; used in QR code URL
+  availability        TEXT             NULL,               -- free text: days, times, frequency
+  bio                 TEXT             NULL,
+  language            VARCHAR(50)      NULL,               -- language the player wants to play in
+  location_town       VARCHAR(200)     NULL,               -- shown publicly
+  location_state      VARCHAR(100)     NULL,               -- shown publicly
+  location_country    VARCHAR(100)     NULL,               -- shown publicly; for browse filtering
+  location_lat        DECIMAL(10,7)    NULL,               -- server-side only; NEVER returned in API
+  location_lng        DECIMAL(10,7)    NULL,               -- server-side only; NEVER returned in API
+  distance_preference TINYINT UNSIGNED NOT NULL DEFAULT 25, -- max miles willing to travel
+  is_active           TINYINT(1)       NOT NULL DEFAULT 1,
+  created_at          TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at          TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -86,16 +91,17 @@ CREATE TABLE lfp_listings (
   schedule_frequency  VARCHAR(100)    NULL,           -- e.g. "Bi-weekly"
   schedule_time       VARCHAR(100)    NULL,           -- e.g. "6pm–10pm"
   safety_tools        TEXT            NULL,           -- free text
-  language            VARCHAR(50)     NULL,           -- language the game is run in
-  location_type       VARCHAR(100)    NULL,           -- "game store", "private home", etc.
-  location_town       VARCHAR(200)    NULL,           -- display-safe; shown to public
-  location_state      VARCHAR(100)    NULL,
-  location_country    VARCHAR(100)    NULL,           -- country for international browse filtering
-  location_lat        DECIMAL(10,7)   NULL,           -- stored server-side only; NEVER returned in API
-  location_lng        DECIMAL(10,7)   NULL,           -- stored server-side only; NEVER returned in API
+  language            VARCHAR(50)      NULL,               -- language the game is run in
+  location_type       VARCHAR(100)     NULL,               -- "game store", "private home", etc.
+  location_town       VARCHAR(200)     NULL,               -- display-safe; shown to public
+  location_state      VARCHAR(100)     NULL,               -- shown publicly
+  location_country    VARCHAR(100)     NULL,               -- shown publicly; for browse filtering
+  location_lat        DECIMAL(10,7)    NULL,               -- server-side only; NEVER returned in API
+  location_lng        DECIMAL(10,7)    NULL,               -- server-side only; NEVER returned in API
+  distance_preference TINYINT UNSIGNED NOT NULL DEFAULT 25, -- max miles for players to travel
   player_slots_total  TINYINT UNSIGNED NULL,
   player_slots_filled TINYINT UNSIGNED NOT NULL DEFAULT 0,
-  is_active           TINYINT(1)      NOT NULL DEFAULT 1,
+  is_active           TINYINT(1)       NOT NULL DEFAULT 1,
   created_at          TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at          TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -129,9 +135,11 @@ CREATE TABLE connections (
                      'agreed_to_meet',   -- both confirmed; location/photos revealed
                      'completed'         -- meeting happened; eligible for review
                    ) NOT NULL DEFAULT 'pending',
-  player_accepted  TINYINT(1)    NOT NULL DEFAULT 0,
-  gm_accepted      TINYINT(1)    NOT NULL DEFAULT 0,
-  agreed_to_meet   TINYINT(1)    NOT NULL DEFAULT 0,
+  player_accepted       TINYINT(1)    NOT NULL DEFAULT 0,  -- initial connection acceptance
+  gm_accepted           TINYINT(1)    NOT NULL DEFAULT 0,  -- initial connection acceptance
+  player_match_accepted TINYINT(1)    NOT NULL DEFAULT 0,  -- "Accept Match" during chat phase
+  gm_match_accepted     TINYINT(1)    NOT NULL DEFAULT 0,  -- "Accept Match" during chat phase
+  agreed_to_meet        TINYINT(1)    NOT NULL DEFAULT 0,  -- set when both match flags = 1
   created_at       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   UNIQUE KEY uq_connection (player_user_id, lfp_listing_id),

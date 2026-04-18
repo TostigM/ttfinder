@@ -25,6 +25,7 @@ $listing['user_id']             = (int) $listing['user_id'];
 $listing['is_active']           = (bool) $listing['is_active'];
 $listing['player_slots_total']  = $listing['player_slots_total'] !== null ? (int) $listing['player_slots_total'] : null;
 $listing['player_slots_filled'] = (int) $listing['player_slots_filled'];
+$listing['distance_preference'] = (int) $listing['distance_preference'];
 unset($listing['location_lat'], $listing['location_lng']);
 
 json_response(['listing' => $listing]);
